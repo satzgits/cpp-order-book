@@ -1,0 +1,21 @@
+# Auto-detect text files and normalize to LF
+* text=auto
+
+# C++
+*.cpp text diff=cpp
+*.hpp text diff=cpp
+*.h text diff=cpp
+
+# CMake
+CMakeLists.txt text
+*.cmake text
+
+# Docs
+*.md text
+*.txt text
+*.yml text
+
+# Binaries
+*.exe binary
+*.obj binary
+*.pdb binary
