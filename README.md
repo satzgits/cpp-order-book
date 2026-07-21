@@ -1,5 +1,9 @@
 # C++ Order Book & Matching Engine
 
+![CI](https://github.com/satzgits/cpp-order-book/actions/workflows/ci.yml/badge.svg)
+![License](https://img.shields.io/badge/License-MIT-yellow)
+![C++](https://img.shields.io/badge/C%2B%2B-17-blue)
+
 Low-latency limit order book with price-time priority matching, implemented in C++.
 
 ## Overview
