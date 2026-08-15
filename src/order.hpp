@@ -43,6 +43,10 @@ struct Trade {
     Trade(uint64_t buy_id, uint64_t sell_id, double p, uint64_t q, uint64_t ts)
         : buy_order_id(buy_id), sell_order_id(sell_id),
           price(p), quantity(q), timestamp(ts) {}
+
+    uint64_t value() const {
+        return static_cast<uint64_t>(price * static_cast<double>(quantity));
+    }
 };
 
 #endif
