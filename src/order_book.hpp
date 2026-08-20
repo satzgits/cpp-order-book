@@ -99,6 +99,43 @@ public:
         return ask - bid;
     }
 
+    struct DepthLevel {
+        double price;
+        uint64_t volume;
+        size_t order_count;
+    };
+
+    std::vector<DepthLevel> get_depth(size_t levels, Side side) const {
+        std::vector<DepthLevel> depth;
+        const auto& book = (side == Side::BUY) ? bids_ : asks_;
+        if (side == Side::BUY) {
+            auto it = book.rbegin();
+            while (it != book.rend() && depth.size() < levels) {
+                uint64_t vol = 0;
+                std::queue<Order> q = it->second;
+                while (!q.empty()) {
+                    vol += q.front().quantity;
+                    q.pop();
+                }
+                depth.push_back({it->first, vol, it->second.size()});
+                ++it;
+            }
+        } else {
+            auto it = book.begin();
+            while (it != book.end() && depth.size() < levels) {
+                uint64_t vol = 0;
+                std::queue<Order> q = it->second;
+                while (!q.empty()) {
+                    vol += q.front().quantity;
+                    q.pop();
+                }
+                depth.push_back({it->first, vol, it->second.size()});
+                ++it;
+            }
+        }
+        return depth;
+    }
+
     uint64_t get_volume_at_price(double price, Side side) const {
         auto& book = (side == Side::BUY) ? bids_ : asks_;
         auto it = book.find(price);

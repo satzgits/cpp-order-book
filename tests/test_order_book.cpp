@@ -85,6 +85,34 @@ void test_spread_calculation() {
     std::cout << "  ✓ Spread calculation with empty sides\n";
 }
 
+void test_depth() {
+    OrderBook book;
+    book.add_limit_order(Side::BUY, 100.00, 500);
+    book.add_limit_order(Side::BUY, 100.05, 300);
+    book.add_limit_order(Side::BUY, 99.95, 200);
+    book.add_limit_order(Side::SELL, 100.10, 300);
+    book.add_limit_order(Side::SELL, 100.20, 100);
+    book.add_limit_order(Side::SELL, 100.30, 400);
+
+    auto bids = book.get_depth(2, Side::BUY);
+    assert(bids.size() == 2);
+    assert(bids[0].price == 100.05);
+    assert(bids[0].volume == 300);
+    assert(bids[0].order_count == 1);
+    assert(bids[1].price == 100.00);
+    assert(bids[1].volume == 500);
+
+    auto asks = book.get_depth(3, Side::SELL);
+    assert(asks.size() == 3);
+    assert(asks[0].price == 100.10);
+    assert(asks[2].price == 100.30);
+    assert(asks[2].volume == 400);
+
+    auto empty = book.get_depth(5, Side::BUY);
+    assert(empty.size() == 3);
+    std::cout << "  ✓ Market depth aggregation and ordering\n";
+}
+
 int main() {
     std::cout << "Running C++ Order Book Tests...\n\n";
 
@@ -95,6 +123,7 @@ int main() {
     test_partial_fill();
     test_best_bid_ask_update();
     test_spread_calculation();
+    test_depth();
 
     std::cout << "\nAll order book tests passed!\n";
     return 0;
