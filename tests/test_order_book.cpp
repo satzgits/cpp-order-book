@@ -113,6 +113,26 @@ void test_depth() {
     std::cout << "  ✓ Market depth aggregation and ordering\n";
 }
 
+void test_midpoint_and_total_depth() {
+    OrderBook book;
+    book.add_limit_order(Side::BUY, 100.00, 500);
+    book.add_limit_order(Side::BUY, 100.05, 300);
+    book.add_limit_order(Side::SELL, 100.10, 300);
+    book.add_limit_order(Side::SELL, 100.20, 100);
+
+    double bid = book.get_best_bid();   // 100.05
+    double ask = book.get_best_ask();   // 100.10
+    assert(book.get_midpoint() == 0.5 * (bid + ask));
+    assert(book.get_spread() == ask - bid);
+
+    assert(book.get_total_depth(Side::BUY) == 800);
+    assert(book.get_total_depth(Side::SELL) == 400);
+    assert(book.has_enough_depth(Side::BUY, 800));
+    assert(!book.has_enough_depth(Side::SELL, 401));
+
+    std::cout << "  ✓ Midpoint, total depth and depth check\n";
+}
+
 int main() {
     std::cout << "Running C++ Order Book Tests...\n\n";
 
@@ -124,6 +144,7 @@ int main() {
     test_best_bid_ask_update();
     test_spread_calculation();
     test_depth();
+    test_midpoint_and_total_depth();
 
     std::cout << "\nAll order book tests passed!\n";
     return 0;

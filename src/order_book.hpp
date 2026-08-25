@@ -99,6 +99,30 @@ public:
         return ask - bid;
     }
 
+    double get_midpoint() const {
+        double bid = get_best_bid();
+        double ask = get_best_ask();
+        if (bid == 0.0 || ask == 0.0) return 0.0;
+        return 0.5 * (bid + ask);
+    }
+
+    uint64_t get_total_depth(Side side) const {
+        const auto& book = (side == Side::BUY) ? bids_ : asks_;
+        uint64_t total = 0;
+        for (const auto& [price, queue] : book) {
+            std::queue<Order> q = queue;
+            while (!q.empty()) {
+                total += q.front().quantity;
+                q.pop();
+            }
+        }
+        return total;
+    }
+
+    bool has_enough_depth(Side side, uint64_t quantity) const {
+        return get_total_depth(side) >= quantity;
+    }
+
     struct DepthLevel {
         double price;
         uint64_t volume;
