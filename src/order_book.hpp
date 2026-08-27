@@ -106,6 +106,14 @@ public:
         return 0.5 * (bid + ask);
     }
 
+    double get_imbalance() const {
+        double bid_vol = static_cast<double>(get_total_depth(Side::BUY));
+        double ask_vol = static_cast<double>(get_total_depth(Side::SELL));
+        double total = bid_vol + ask_vol;
+        if (total == 0.0) return 0.0;
+        return (bid_vol - ask_vol) / total;
+    }
+
     uint64_t get_total_depth(Side side) const {
         const auto& book = (side == Side::BUY) ? bids_ : asks_;
         uint64_t total = 0;

@@ -133,6 +133,18 @@ void test_midpoint_and_total_depth() {
     std::cout << "  ✓ Midpoint, total depth and depth check\n";
 }
 
+void test_imbalance() {
+    OrderBook book;
+    assert(book.get_imbalance() == 0.0);  // empty book -> 0
+
+    book.add_limit_order(Side::BUY, 100.00, 400);
+    book.add_limit_order(Side::SELL, 100.10, 200);
+    // bid 400, ask 200 -> (400-200)/600 = 1/3
+    assert(std::abs(book.get_imbalance() - (1.0 / 3.0)) < 1e-6);
+
+    std::cout << "  ✓ Order book imbalance\n";
+}
+
 int main() {
     std::cout << "Running C++ Order Book Tests...\n\n";
 
@@ -145,6 +157,7 @@ int main() {
     test_spread_calculation();
     test_depth();
     test_midpoint_and_total_depth();
+    test_imbalance();
 
     std::cout << "\nAll order book tests passed!\n";
     return 0;
