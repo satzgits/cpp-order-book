@@ -19,7 +19,7 @@ The order book is the fundamental data structure of all modern trading:
 3. **Market microstructure** — understanding the LOB means understanding how prices actually form
 4. **Performance engineering** — cache-friendly data structures, memory pools, lock-free design
 
-A C++ order book on your GitHub immediately signals to firms like Five Rings, IMC, and Optiver that you understand low-latency systems.
+A C++ order book in this  GitHub repo immediately signals to firms like Five Rings, IMC, and Optiver that you understand low-latency systems.
 
 ## Features
 
